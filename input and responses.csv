@@ -1,0 +1,15 @@
+﻿INPUT_TEXT,RESPONSE
+Can I speak to the Human,"Yes, please wait while we are connecting you to our consultants"
+Hi,Hello. How can I help you?
+Hello,Hello. How can I help you?
+Good Morning,Hello. How can I help you?
+Good Afternoon,Hello. How can I help you?
+Greetings,Hello. How can I help you?
+I want to cancel my subscription,To cancel you subscription you need to go to <link>
+I want to renew a subscription ,To renew you subscription you need to go to <link>
+How can I edit my personal details,"In order to edit your personal details, please navigate to a tab in top  right corner"
+Where can I find information on my payments,All information on past and future payemnts can be found <link>
+How much money do I still owe,You currently owe <query>
+Where can I find information about my past purchases,All information on past and future payemnts can be found <link>
+How much does premium subscription cost,You can obtain premium subscription for $$
+I want to learn more about subscription,To learn more about subscription please go to <link>
