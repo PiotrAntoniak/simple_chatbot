@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Dec  4 11:39:49 2021
-
-@author: pix
-"""
-
 import pkg_resources
 from symspellpy import SymSpell, Verbosity
 import numpy as np 
