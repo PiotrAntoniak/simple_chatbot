@@ -11,24 +11,29 @@ import torch.nn.functional as F
 import pandas as pd
 app = Flask(__name__)
 
+
+#basic spell checker
 sym_spell = SymSpell(max_dictionary_edit_distance=3, prefix_length=7)
 dictionary_path = pkg_resources.resource_filename("symspellpy", "frequency_dictionary_en_82_765.txt")
 sym_spell.load_dictionary(dictionary_path, term_index=0, count_index=1)
 
+#fast sentence transformer
 tokenizer = AutoTokenizer.from_pretrained('sentence-transformers/all-MiniLM-L6-v2')
-
 model =  torch.jit.load( "quant/pytorch_model.pth").cpu()
 model.eval()
 
+#load embeddings generated from csv file in a repo
 inp_emb_dicto = np.load('inp_emb_dicto.npy',allow_pickle='TRUE').item()
 inp_res_dicto = np.load('inp_res_dicto.npy',allow_pickle='TRUE').item()
 
 chat = ""
 
+#DO_NOT_CHECK.txt is a file that stores words that may be fixed by spell checker but are actually correct
 with open("DO_NOT_CHECK.txt","r") as f:
     DO_NOT_CHECK = f.read()
     DO_NOT_CHECK.split(" ")
-     
+
+#apply spell checker
 def fix_sentence(sentence,DO_NOT_CHECK=DO_NOT_CHECK):
     fixed = []
     for word in sentence.split(" "):
@@ -40,6 +45,7 @@ def fix_sentence(sentence,DO_NOT_CHECK=DO_NOT_CHECK):
             fixed.append(suggestions[0].__str__().split(",")[0])
     return fixed
 
+#utility functions used by chatbot
 cos = torch.nn.CosineSimilarity(dim=1, eps=1e-6)
 def cos_sim(emb1,emb2, cos = cos):
     return cos(emb1,emb2)
@@ -59,10 +65,12 @@ def calculate_emb(sentence, model = model, tokenizer = tokenizer):
     sentence_embeddings = F.normalize(sentence_embeddings, p=2, dim=1)
     return sentence_embeddings
 
+
 @app.route('/')
 def home():
     return flask.render_template('index.html')
 
+#generate and post responses
 @app.route('/match_response',methods=['POST'])
 def match_response():
     global chat
@@ -84,6 +92,7 @@ def match_response():
     best_response_score = ordered_responses[-1][1]
     best_response = ordered_responses[-1][0]
     
+    #time.sleep(1)
     #ADD SLEEP TO MIMIC HUMAN
     
     if best_response_score > 0.8:
@@ -108,7 +117,10 @@ if __name__ == '__main__':
     with open("update.txt","r") as f:
         update = f.read()
         f.close()
-    if update == "yes":
+    if update == "yes": 
+    #a very simple updating scheme. if update.txt has yeilds yes: run update embeddings dictionaries
+    #thanks to that simplicity one can package the entire repo into an .exe and have 
+    #nontechnical person update and instantly check the performance or use it
         data = pd.read_csv("input and responses.csv", low_memory=False)
         inp_res_dicto = {}
         for inp,res in zip(data.INPUT_TEXT, data.RESPONSE):
