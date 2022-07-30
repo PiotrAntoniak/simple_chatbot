@@ -11,6 +11,11 @@ import torch.nn.functional as F
 import pandas as pd
 app = Flask(__name__)
 
+import argparse
+parser = argparse.ArgumentParser(description='very simple chat bot that uses predefine answers')
+parser.add_argument('update', default = False, help='Whether to recalcualte embeddings of input-response files')
+args = vars(parser.parse_args())
+
 
 #basic spell checker
 sym_spell = SymSpell(max_dictionary_edit_distance=3, prefix_length=7)
@@ -93,7 +98,6 @@ def match_response():
     best_response = ordered_responses[-1][0]
     
     #time.sleep(1)
-    #ADD SLEEP TO MIMIC HUMAN
     
     if best_response_score > 0.8:
         answer = best_response
@@ -114,13 +118,7 @@ def match_response():
 
 if __name__ == '__main__':
     #app.run(host='0.0.0.0',port=8080)
-    with open("update.txt","r") as f:
-        update = f.read()
-        f.close()
-    if update == "yes": 
-    #a very simple updating scheme. if update.txt has yeilds yes: run update embeddings dictionaries
-    #thanks to that simplicity one can package the entire repo into an .exe and have 
-    #nontechnical person update and instantly check the performance or use it
+    if args.update: 
         data = pd.read_csv("input and responses.csv", low_memory=False)
         inp_res_dicto = {}
         for inp,res in zip(data.INPUT_TEXT, data.RESPONSE):
