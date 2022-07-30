@@ -1,4 +1,6 @@
-# simple_chatbot
+##SIMPLE CHAT BOT
+
+very simple chat bot - aked a question it will give back a predefined answer
 
 edit input and responses.csv file - it contains answers to possible questions that you may encounter
 
