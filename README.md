@@ -1,6 +1,6 @@
 ## SIMPLE CHAT BOT
 
-### very simple chat bot - aked a question it will give back a predefined answer
+### very simple chat bot - asked a question it will give back a predefined answer
 
 #### Steps to make it work:
 - Fork repo, including folder quant (in includes a small transformer).
